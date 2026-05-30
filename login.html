@@ -6,143 +6,325 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Meu Blog</title>
 
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         body {
-            background: #f4f4f4;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            overflow: hidden;
+        }
+
+        .background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .background span {
+            position: absolute;
+            display: block;
+            width: 25px;
+            height: 25px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            animation: float 15s linear infinite;
+        }
+
+        .background span:nth-child(1) {
+            left: 10%;
+            animation-duration: 12s;
+        }
+
+        .background span:nth-child(2) {
+            left: 30%;
+            animation-duration: 18s;
+        }
+
+        .background span:nth-child(3) {
+            left: 60%;
+            animation-duration: 10s;
+        }
+
+        .background span:nth-child(4) {
+            left: 80%;
+            animation-duration: 15s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+            }
+
+            100% {
+                transform: translateY(-100px) scale(1.5);
+            }
         }
 
         .login-box {
-            width: 350px;
-            background: #fff;
+            position: relative;
+            z-index: 2;
+            width: 400px;
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,.2);
+            color: white;
+            animation: aparecer 1s ease;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .login-box h1 {
             text-align: center;
-            color: #333;
             margin-bottom: 10px;
         }
 
         .login-box p {
             text-align: center;
-            color: #666;
             margin-bottom: 25px;
+            opacity: .9;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #fff;
         }
 
         .input-group {
             margin-bottom: 18px;
+            position: relative;
         }
 
-        .input-group label {
-            display: block;
-            margin-bottom: 6px;
-            color: #444;
-            font-weight: bold;
+        .input-group i {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: #666;
         }
 
         .input-group input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 14px 45px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
         }
 
-        .input-group input:focus {
-            outline: none;
-            border-color: #007bff;
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            cursor: pointer;
+            color: #666;
         }
 
         button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: none;
-            border-radius: 6px;
-            background: #007bff;
-            color: white;
+            border-radius: 10px;
+            background: #fff;
+            color: #2196f3;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
+            transition: .3s;
         }
 
         button:hover {
-            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,.2);
         }
 
         .links {
             display: flex;
             justify-content: space-between;
-            margin-top: 15px;
+            margin-top: 18px;
         }
 
         .links a {
+            color: white;
             text-decoration: none;
-            color: #007bff;
             font-size: 14px;
         }
 
         .links a:hover {
             text-decoration: underline;
         }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #90ee90;
+        }
+
+        .error {
+            color: #ffb3b3;
+        }
+
+        .loader {
+            display: none;
+            margin: 15px auto;
+            width: 30px;
+            height: 30px;
+            border: 4px solid rgba(255,255,255,.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media(max-width: 480px) {
+            .login-box {
+                width: 90%;
+                padding: 30px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
+    <div class="background">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
     <div class="login-box">
+
         <h1>Meu Blog</h1>
-        <p>Faça login para acessar sua conta</p>
+
+        <div class="welcome">
+            Bem-vindo, <strong>Jadson Vitor Cunha de Aguiar</strong>
+        </div>
+
+        <p>Acesse sua conta</p>
 
         <form id="loginForm">
+
             <div class="input-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" placeholder="Digite seu e-mail" required>
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="email" placeholder="Digite seu e-mail">
             </div>
 
             <div class="input-group">
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" placeholder="Digite sua senha" required>
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="senha" placeholder="Digite sua senha">
+                <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
             </div>
 
-            <button type="submit">Entrar</button>
+            <button type="submit">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Entrar
+            </button>
+
+            <div class="loader" id="loader"></div>
+
+            <div class="message" id="message"></div>
 
             <div class="links">
                 <a href="#">Esqueceu a senha?</a>
                 <a href="#">Criar conta</a>
             </div>
+
         </form>
+
     </div>
 
     <script>
-        document.getElementById("loginForm").addEventListener("submit", function (event) {
-            event.preventDefault();
+
+        const form = document.getElementById("loginForm");
+        const message = document.getElementById("message");
+        const loader = document.getElementById("loader");
+
+        document.getElementById("togglePassword")
+            .addEventListener("click", function () {
+
+                const senha = document.getElementById("senha");
+
+                if (senha.type === "password") {
+                    senha.type = "text";
+                    this.classList.replace("fa-eye", "fa-eye-slash");
+                } else {
+                    senha.type = "password";
+                    this.classList.replace("fa-eye-slash", "fa-eye");
+                }
+            });
+
+        form.addEventListener("submit", function (e) {
+
+            e.preventDefault();
 
             const email = document.getElementById("email").value.trim();
             const senha = document.getElementById("senha").value.trim();
 
-            if (email && senha) {
-                window.location.href = "dashboard.html";
-            } else {
-                alert("Preencha todos os campos.");
+            message.innerHTML = "";
+
+            if (!email || !senha) {
+                message.innerHTML = "⚠️ Preencha todos os campos.";
+                message.className = "message error";
+                return;
             }
+
+            loader.style.display = "block";
+
+            setTimeout(() => {
+
+                loader.style.display = "none";
+
+                message.innerHTML = "✅ Login realizado com sucesso!";
+                message.className = "message success";
+
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1500);
+
+            }, 2000);
+
         });
+
     </script>
 
 </body>
 
 </html>
-
-jadson vitor cunha de aguiar
